@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ikasi ingelerako Irregular Verbs-ak</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1100px;
+            overflow-y: auto;
+            height: 70vh;
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #verbsContainer {
+            padding-top: 10px;
+        }
+
+        .verb-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .verb-group input {
+            width: 20%;
+            /* Reducido el tamaño */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            /* Reducir el tamaño de la fuente */
+        }
+
+        .verb-group input[readonly] {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            /* Fondo gris claro para indicar que no es editable */
+        }
+
+        .verb-type {
+            font-weight: bold;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-left: 10px;
+            width: 100%;
+            display: none;
+            /* No mostrar resultados inicialmente */
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #showAnswersBtn {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ikasi ingelerako Irregular Verbs-ak</h1>
+        <label for="verbSets">Zein aditz multzo aukeratu nahi duzu?</label>
+        <select id="verbSets">
+            <option value="1">1. multzoa</option>
+            <option value="2">2. multzoa</option>
+            <option value="3" selected>3. multzoa</option>
+        </select>
+        <label for="numVerbs">Zenbat aditz ikasi nahi dituzu?</label>
+        <select id="numVerbs">
+            <option value="5">5 aditz</option>
+            <option value="10" selected>10 aditz</option>
+            <option value="15">15 aditz</option>
+            <option value="20">20 aditz</option>
+        </select>
+        <button onclick="startQuiz()">Hasi</button>
+        <div id="verbsContainer"></div>
+        <button onclick="checkAllAnswers()">Erantzunak egiaztatu</button>
+        <button id="showAnswersBtn" onclick="showAnswers()" style="display: none;">Erantzunak ikusi</button>
+        <div id="scoreContainer" class="score"></div>
+    </div>
+
+    <script>
+        const verbSets = {
+            1: [
+                { infinitive: "be", past: "was/were", basque: "izan/egon" },
+                { infinitive: "begin", past: "began", basque: "hasi" },
+                { infinitive: "bite", past: "bit", basque: "koska egin" },
+                { infinitive: "break", past: "broken", basque: "apurtu" },
+                { infinitive: "bring", past: "brought", basque: "ekarri" },
+                { infinitive: "build", past: "built", basque: "eraiki" },
+                { infinitive: "buy", past: "bought", basque: "erosi" },
+                { infinitive: "catch", past: "cought", basque: "harrapatu" },
+                { infinitive: "come", past: "came", basque: "etorri" },
+                { infinitive: "cost", past: "cost", basque: "balio" },
+                { infinitive: "cut", past: "cut", basque: "moztu" },
+                { infinitive: "do", past: "dit", basque: "egin" },
+                { infinitive: "draw", past: "drew", basque: "marraztu" },
+                { infinitive: "dream", past: "deamed/dreamt", basque: "amets egin" },
+                { infinitive: "drink", past: "drank", basque: "edan" },
+                { infinitive: "drive", past: "drove", basque: "gidatu" },
+                { infinitive: "eat", past: "ate", basque: "jan" },
+                { infinitive: "fall", past: "fell", basque: "erori" },
+                { infinitive: "feel", past: "felt", basque: "sentitu" },
+                { infinitive: "find", past: "found", basque: "topa" }
+            ],
+            2: [
+                { infinitive: "fly", past: "flew", basque: "hegan egin" },
+                { infinitive: "forget", past: "forgot", basque: "ahaztu" },
+                { infinitive: "get", past: "got", basque: "lortu" },
+                { infinitive: "give", past: "gave", basque: "eman" },
+                { infinitive: "go", past: "went", basque: "joan" },
+                { infinitive: "have", past: "had", basque: "eduki" },
+                { infinitive: "hear", past: "heard", basque: "entzun" },
+                { infinitive: "hold", past: "held", basque: "eutsi" },
+                { infinitive: "keep", past: "kept", basque: "gorde" },
+                { infinitive: "learn", past: "learned/learnt", basque: "ikasi" },
+                { infinitive: "know", past: "knew", basque: "jakin/ezagutu" },
+                { infinitive: "leave", past: "left", basque: "irten/utzi" },
+                { infinitive: "lend", past: "lent", basque: "prestatu" },
+                { infinitive: "let", past: "let", basque: "baimena eman" },
+                { infinitive: "lie", past: "lay", basque: "etzan" },
+                { infinitive: "lose", past: "lost", basque: "galdu" },
+                { infinitive: "make", past: "made", basque: "egin/sortu" },
+                { infinitive: "mean", past: "meant", basque: "esanahi" },
+                { infinitive: "meet", past: "met", basque: "ezagutu" },
+                { infinitive: "pay", past: "paid", basque: "ordaindu" }
+            ],
+            3: [
+                { infinitive: "put", past: "put", basque: "ipini" },
+                { infinitive: "read", past: "read", basque: "irakurri" },
+                { infinitive: "ride", past: "rode", basque: "zerbaitetan ibili" },
+                { infinitive: "ring", past: "rang", basque: "txirrina jo" },
+                { infinitive: "run", past: "ran", basque: "korrika egin" },
+                { infinitive: "say", past: "said", basque: "esan" },
+                { infinitive: "see", past: "saw", basque: "ikusi" },
+                { infinitive: "sell", past: "sold", basque: "saldu" },
+                { infinitive: "send", past: "sent", basque: "bidali" },
+                { infinitive: "set", past: "set", basque: "colocar" },
+                { infinitive: "show", past: "showed", basque: "erakutsi" },
+                { infinitive: "sing", past: "sang", basque: "abestu" },
+                { infinitive: "sit", past: "sat", basque: "eseri" },
+                { infinitive: "sleep", past: "slept", basque: "lo egin" },
+                { infinitive: "smell", past: "smelled/smelt", basque: "usaindu" } /*,
+                { infinitive: "speak", past: "spoke", basque: "" },
+                { infinitive: "spend", past: "spent", basque: "" },
+                { infinitive: "stand", past: "stood", basque: "" },
+                { infinitive: "steal", past: "stole", basque: "" },
+                { infinitive: "swim", past: "swam", basque: "" },
+                { infinitive: "take", past: "took", basque: "" },
+                { infinitive: "teach", past: "tought", basque: "" },
+                { infinitive: "tell", past: "told", basque: "" },
+                { infinitive: "think", past: "thought", basque: "" },
+                { infinitive: "throw", past: "threw", basque: "" },
+                { infinitive: "understrand", past: "understood", basque: "" },
+                { infinitive: "wake", past: "woke", basque: "" },
+                { infinitive: "ware", past: "wore", basque: "" },
+                { infinitive: "win", past: "won", basque: "" },
+                { infinitive: "write", past: "wrote", basque: "" }*/
+            ]
+        };
+
+
+        function getRandomVerbs(num, sets) {
+            let selectedVerbs = [];
+            sets.forEach(set => {
+                selectedVerbs = [...selectedVerbs, ...verbSets[set]];
+            });
+            const shuffled = selectedVerbs.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        function loadVerbs(numVerbs, sets) {
+            const verbsContainer = document.getElementById("verbsContainer");
+            verbsContainer.innerHTML = "";
+
+            const randomVerbs = getRandomVerbs(numVerbs, sets);
+
+            randomVerbs.forEach((verb, index) => {
+                const promptType = ["infinitive", "past", "basque"][Math.floor(Math.random() * 3)];
+                let prompt1, prompt2, prompt3;
+                let readonly1 = false, readonly2 = false, readonly3 = false;
+
+                if (promptType === "infinitive") {
+                    prompt1 = verb.infinitive;
+                    prompt2 = "";
+                    prompt3 = "";
+                    readonly1 = true;
+                } else if (promptType === "past") {
+                    prompt1 = "";
+                    prompt2 = verb.past;
+                    prompt3 = "";
+                    readonly2 = true;
+                } else {
+                    prompt1 = "";
+                    prompt2 = "";
+                    prompt3 = verb.basque;
+                    readonly3 = true;
+                }
+
+                const verbGroup = document.createElement("div");
+                verbGroup.className = "verb-group";
+                verbGroup.innerHTML = ` 
+                    <span class="verb-type">Infinitive:</span>
+                    <input type="text" id="answerInput1_${index}" value="${prompt1}" placeholder="Infinitive" ${readonly1 ? 'readonly' : ''}>
+                    <span class="verb-type">Past:</span>
+                    <input type="text" id="answerInput2_${index}" value="${prompt2}" placeholder="Past" ${readonly2 ? 'readonly' : ''}>
+                    <span class="verb-type">Basque:</span>
+                    <input type="text" id="answerInput3_${index}" value="${prompt3}" placeholder="Basque" ${readonly3 ? 'readonly' : ''}>
+                    <div id="result_${index}" class="result"></div>
+                `;
+                verbsContainer.appendChild(verbGroup);
+
+                verbGroup.dataset.correctAnswer1 = verb.infinitive;
+                verbGroup.dataset.correctAnswer2 = verb.past;
+                verbGroup.dataset.correctAnswer3 = verb.basque;
+            });
+        }
+
+        function startQuiz() {
+            const numVerbs = parseInt(document.getElementById("numVerbs").value);
+            const selectedSets = Array.from(document.getElementById("verbSets").selectedOptions).map(option => option.value);
+
+            if (numVerbs >= 1 && numVerbs <= numVerbs) { // Corregir la comparación
+                loadVerbs(numVerbs, selectedSets); // Pasar correctamente el conjunto de verbos seleccionado
+                document.getElementById("scoreContainer").innerHTML = "";
+                document.getElementById("showAnswersBtn").style.display = "none";
+            } else {
+                alert("Por favor, selecciona un número válido de verbos.");
+            }
+        }
+
+
+        function checkAllAnswers() {
+            let score = 0;
+            let allCorrect = true; // Variable para verificar si todas las respuestas son correctas
+            const verbGroups = document.querySelectorAll('.verb-group');
+            verbGroups.forEach((group, index) => {
+                const input1 = document.getElementById("answerInput1_" + index);
+                const input2 = document.getElementById("answerInput2_" + index);
+                const input3 = document.getElementById("answerInput3_" + index);
+                const resultDiv = document.getElementById("result_" + index);
+
+                const correctAnswer1 = group.dataset.correctAnswer1;
+                const correctAnswer2 = group.dataset.correctAnswer2;
+                const correctAnswer3 = group.dataset.correctAnswer3;
+
+                const answer1Correct = input1.value.trim().toLowerCase() === correctAnswer1.toLowerCase();
+                const answer2Correct = input2.value.trim().toLowerCase() === correctAnswer2.toLowerCase();
+                const answer3Correct = input3.value.trim().toLowerCase() === correctAnswer3.toLowerCase();
+
+                if (answer1Correct && answer2Correct && answer3Correct) {
+                    resultDiv.innerHTML = "Primeran!";
+                    resultDiv.classList.add("success");
+                    score++;
+                } else {
+                    resultDiv.innerHTML = "Akatsa dago.";
+                    resultDiv.classList.add("error");
+                    allCorrect = false;
+                }
+                resultDiv.style.display = "block";
+            });
+
+            document.getElementById("scoreContainer").innerHTML = `Puntuazioa: ${score} / ${verbGroups.length}`;
+
+            if (allCorrect) {
+                alert("Erantzun guztiak dira zuzena! Zorionak!!!");
+            }
+
+            document.getElementById("showAnswersBtn").style.display = "inline-block";
+        }
+
+        function showAnswers() {
+            const verbGroups = document.querySelectorAll('.verb-group');
+            verbGroups.forEach((group, index) => {
+                const resultDiv = document.getElementById("result_" + index);
+                const correctAnswer1 = group.dataset.correctAnswer1;
+                const correctAnswer2 = group.dataset.correctAnswer2;
+                const correctAnswer3 = group.dataset.correctAnswer3;
+
+                const input1 = document.getElementById("answerInput1_" + index);
+                const input2 = document.getElementById("answerInput2_" + index);
+                const input3 = document.getElementById("answerInput3_" + index);
+
+                let responseMessage = '';
+
+                if (input1.value.trim().toLowerCase() !== correctAnswer1.toLowerCase()) {
+                    responseMessage += `Correct answer for Infinitive: ${correctAnswer1}. `;
+                }
+                if (input2.value.trim().toLowerCase() !== correctAnswer2.toLowerCase()) {
+                    responseMessage += `Correct answer for Past: ${correctAnswer2}. `;
+                }
+                if (input3.value.trim().toLowerCase() !== correctAnswer3.toLowerCase()) {
+                    responseMessage += `Correct answer for Basque: ${correctAnswer3}. `;
+                }
+
+                // Solo mostrar las respuestas incorrectas
+                if (responseMessage) {
+                    resultDiv.innerHTML = responseMessage;
+                    resultDiv.classList.remove("success", "error");
+                    resultDiv.classList.add("error");
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
