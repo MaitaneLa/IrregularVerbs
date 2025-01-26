@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -113,15 +113,19 @@
             <option value="1">1. multzoa</option>
             <option value="2">2. multzoa</option>
             <option value="3">3. multzoa</option>
-            <option value="4" selected>4. multzoa</option>
+            <option value="4">4. multzoa</option>
+            <option value="5" selected> 1+2 multzoak </option>
+            <option value="5">3+4 multzoa</option>
+
             
         </select>
         <label for="numVerbs">Zenbat aditz ikasi nahi dituzu?</label>
         <select id="numVerbs">
             <option value="5">5 aditz</option>
-            <option value="10" selected>10 aditz</option>
+            <option value="10">10 aditz</option>
             <option value="15">15 aditz</option>
             <option value="20">20 aditz</option>
+            <option value="35" selected>35 aditz</option>
         </select>
         <button onclick="startQuiz()">Hasi</button>
         <div id="verbsContainer"></div>
@@ -209,7 +213,83 @@
                 { infinitive: "wear", past: "wore", basque: "jantzi" },
                 { infinitive: "win", past: "won", basque: "irabazi" },
                 { infinitive: "write", past: "wrote", basque: "idatzi" }
+            ],
+            5: [
+                { infinitive: "be", past: "was/were", basque: "izan/egon" },
+                { infinitive: "begin", past: "began", basque: "hasi" },
+                { infinitive: "bite", past: "bit", basque: "koska egin" },
+                { infinitive: "break", past: "broken", basque: "apurtu" },
+                { infinitive: "bring", past: "brought", basque: "ekarri" },
+                { infinitive: "build", past: "built", basque: "eraiki" },
+                { infinitive: "buy", past: "bought", basque: "erosi" },
+                { infinitive: "catch", past: "cought", basque: "harrapatu" },
+                { infinitive: "come", past: "came", basque: "etorri" },
+                { infinitive: "cost", past: "cost", basque: "balio" },
+                { infinitive: "cut", past: "cut", basque: "moztu" },
+                { infinitive: "do", past: "dit", basque: "egin" },
+                { infinitive: "draw", past: "drew", basque: "marraztu" },
+                { infinitive: "dream", past: "dreamed/dreamt", basque: "amets egin" },
+                { infinitive: "drink", past: "drank", basque: "edan" },
+                { infinitive: "drive", past: "drove", basque: "gidatu" },
+                { infinitive: "eat", past: "ate", basque: "jan" },
+                { infinitive: "fall", past: "fell", basque: "erori" },
+                { infinitive: "feel", past: "felt", basque: "sentitu" },
+                { infinitive: "find", past: "found", basque: "topa" },
+                { infinitive: "fly", past: "flew", basque: "hegan egin" },
+                { infinitive: "forget", past: "forgot", basque: "ahaztu" },
+                { infinitive: "get", past: "got", basque: "lortu" },
+                { infinitive: "give", past: "gave", basque: "eman" },
+                { infinitive: "go", past: "went", basque: "joan" },
+                { infinitive: "have", past: "had", basque: "eduki" },
+                { infinitive: "hear", past: "heard", basque: "entzun" },
+                { infinitive: "hold", past: "held", basque: "eutsi" },
+                { infinitive: "keep", past: "kept", basque: "gorde" },
+                { infinitive: "learn", past: "learned/learnt", basque: "ikasi" },
+                { infinitive: "know", past: "knew", basque: "jakin/ezagutu" },
+                { infinitive: "leave", past: "left", basque: "irten/utzi" },
+                { infinitive: "lend", past: "lent", basque: "prestatu" },
+                { infinitive: "let", past: "let", basque: "baimena eman" },
+                { infinitive: "lie", past: "lay", basque: "etzan" },
+                
+            ],
+            6:[
+                { infinitive: "lose", past: "lost", basque: "galdu" },
+                { infinitive: "make", past: "made", basque: "egin/sortu" },
+                { infinitive: "mean", past: "meant", basque: "esanahi" },
+                { infinitive: "meet", past: "met", basque: "ezagutu" },
+                { infinitive: "pay", past: "paid", basque: "ordaindu" },
+                { infinitive: "put", past: "put", basque: "ipini" },
+                { infinitive: "read", past: "read", basque: "irakurri" },
+                { infinitive: "ride", past: "rode", basque: "zerbaitetan ibili" },
+                { infinitive: "ring", past: "rang", basque: "txirrina jo" },
+                { infinitive: "run", past: "ran", basque: "korrika egin" },
+                { infinitive: "say", past: "said", basque: "esan" },
+                { infinitive: "see", past: "saw", basque: "ikusi" },
+                { infinitive: "sell", past: "sold", basque: "saldu" },
+                { infinitive: "send", past: "sent", basque: "bidali" },
+                { infinitive: "set", past: "set", basque: "colocar" },
+                { infinitive: "show", past: "showed", basque: "erakutsi" },
+                { infinitive: "sing", past: "sang", basque: "abestu" },
+                { infinitive: "sit", past: "sat", basque: "eseri" },
+                { infinitive: "sleep", past: "slept", basque: "lo egin" },
+                { infinitive: "smell", past: "smelled/smelt", basque: "usaindu" },
+                { infinitive: "speak", past: "spoke", basque: "hitz egin" },
+                { infinitive: "spend", past: "spent", basque: "gastatu/igaro" },
+                { infinitive: "stand", past: "stood", basque: "zutundu/altxatu" },
+                { infinitive: "steal", past: "stole", basque: "lapurtu" },
+                { infinitive: "swim", past: "swam", basque: "igeri egin" },
+                { infinitive: "take", past: "took", basque: "hartu" },
+                { infinitive: "teach", past: "taught", basque: "irakatsi" },
+                { infinitive: "tell", past: "told", basque: "esan/kontatu" },
+                { infinitive: "think", past: "thought", basque: "pentsatu" },
+                { infinitive: "throw", past: "threw", basque: "bota" },
+                { infinitive: "understand", past: "understood", basque: "ulertu" },
+                { infinitive: "wake", past: "woke", basque: "esnatu" },
+                { infinitive: "wear", past: "wore", basque: "jantzi" },
+                { infinitive: "win", past: "won", basque: "irabazi" },
+                { infinitive: "write", past: "wrote", basque: "idatzi" }
             ]
+
         };
 
 
